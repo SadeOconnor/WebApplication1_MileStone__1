@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WebApplication1_MileStone__1._Default" %>
 
+
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <head>
@@ -104,7 +105,7 @@
             <div class="col-md-12">
                 <h1 id="aspnetTitle" class="store-title">Bloom Clothing Store</h1>
                 <p class="lead subtitle">Flourish in Fashion</p>
-                <p><a href="http://www.asp.net" class="btn btn-outline-primary">Learn more &raquo;</a></p>
+             
             </div>
         </section>
 
@@ -120,8 +121,7 @@
                                 <asp:Image ID="Image1" runat="server" Height="132px" ImageUrl="~/App_Start/img1.png" Width="122px" />
                             </h3>
                             <h3 class="product-title">Lucky Charm</h3>
-                            <p class="product-price">$29.99</p>
-                            <a href="#" class="btn btn-product">Add to Cart</a>
+                            
                         </div>
                     </div>
 
@@ -132,8 +132,7 @@
                                 <asp:Image ID="Image2" runat="server" Height="144px" ImageUrl="~/App_Start/img2.png" Width="137px" />
                             </h3>
                             <h3 class="product-title">Barbie Dream</h3>
-                            <p class="product-price">$39.99</p>
-                            <a href="#" class="btn btn-product">Add to Cart</a>
+                         
                         </div>
                     </div>
 
@@ -144,8 +143,7 @@
                                 <asp:Image ID="Image3" runat="server" Height="140px" ImageUrl="~/App_Start/img3.png" Width="132px" />
                             </h3>
                             <h3 class="product-title">Fur Baby</h3>
-                            <p class="product-price">$49.99</p>
-                            <a href="#" class="btn btn-product">Add to Cart</a>
+                            
                         </div>
                     </div>
                 </div>
@@ -156,5 +154,3 @@
     </main>
 
 </asp:Content>
-
-
