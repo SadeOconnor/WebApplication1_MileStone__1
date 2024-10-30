@@ -11,25 +11,25 @@ namespace WebApplication1_MileStone__1
 {
 
 
-    public partial class Products
+    public partial class WebForm1
     {
 
         /// <summary>
-        /// productListContainer control.
+        /// SqlDataSource1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder productListContainer;
+        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
 
         /// <summary>
-        /// ProductRepeater control.
+        /// GridView1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater ProductRepeater;
+        protected global::System.Web.UI.WebControls.GridView GridView1;
     }
 }

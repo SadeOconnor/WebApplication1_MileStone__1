@@ -2,11 +2,11 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
-    <head>
+    
         <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
         
-    </head>
+    
 
     <style>
         body {
@@ -19,7 +19,7 @@
             font-family: 'Great Vibes', cursive; /* Cursive font for main title */
             color: #e75480; /* Dark pink */
             margin: 40px 0;
-            font-size: 4rem; /* Change this value to increase/decrease size */
+            font-size: 4rem; 
         }
 
         .product-item {
@@ -118,15 +118,41 @@
 
          <!-- View Cart Link -->
         <div style="text-align: center; margin: 50px 0;">
+             <asp:PlaceHolder ID="productListContainer" runat="server"></asp:PlaceHolder>
     
 </div>
+
+        <div class="container" runat="server">
+            <asp:Repeater ID="ProductRepeater" runat="server">
+                <ItemTemplate>
+                    <div class="product-item">
+                        <img class="auto-style2" src='<%# Eval("ImagePath") %>' alt="Product Image" />
+                        <div>
+                            <h3 class="product-title"><%# Eval("Name") %></h3>
+                            <p class="product-info"><strong>ID:</strong> <%# Eval("ProductID") %></p>
+                            <p class="product-info"><strong>Description:</strong> <%# Eval("Description") %></p>
+                            <p class="product-info"><strong>Category:</strong> <%# Eval("Category") %></p>
+                            <p class="price-tag"><strong>Price:</strong> $<%# Eval("Price") %></p>
+
+                            <label for="quantity-<%# Eval("ProductID") %>">Quantity:</label>
+                            <input type="number" id="quantity-<%# Eval("ProductID") %>" value="1" min="1" style="width: 50px;" />
+
+                            <button onclick="addToCart('<%# Eval("Name") %>', <%# Eval("Price") %>, document.getElementById('quantity-<%# Eval("ProductID") %>').value)">Add to Cart</button>
+                            <button onclick="showUpdateForm('<%# Eval("ProductID") %>', '<%# Eval("Name") %>', '<%# Eval("Description") %>', <%# Eval("Price") %>, '<%# Eval("Quantity") %>', '<%# Eval("Category") %>', '<%# Eval("ImagePath") %>')">Update Product</button>
+                        </div>
+                    </div>
+                </ItemTemplate>
+            </asp:Repeater>
+        </div>
+
+        
 
         <div class="container">
             <!-- Product 1 -->
             
             <div class="product-item">
                 <img class="auto-style3" src="App_Start/img5.png" />
-                &nbsp;<div>
+                &nbsp;</div>
                     <h3 class="product-title">Men's T-Shirt</h3>
                     <p class="product-info"><strong>ID:</strong>001</p>
                     <p class="product-info"><strong></strong></p>
@@ -141,7 +167,7 @@
         <button onclick="addToCart('Men\'s T-Shirt', 25, document.getElementById('quantity-001').value)">Add to Cart</button>
         
                 </div>
-            </div>
+            
 
             <!-- Product 2 -->
             <div class="product-item">
@@ -194,7 +220,7 @@
 
                 const subtotal = price * quantity;
 
-                // You can store items in an array in session storage
+                // Store items in an array in session storage
                 let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
 
                 // Check if product is already in the cart
@@ -214,5 +240,8 @@
 
                 alert(`${productName} has been added to the cart. Subtotal: $${subtotal.toFixed(2)}`);
             }
+
+           
+
 </script>
 </asp:Content>

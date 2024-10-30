@@ -1,12 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Error404.aspx.cs" Inherits="WebApplication1_MileStone__1.Error404" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-<!DOCTYPE html>
-<html lang="en">
+<h1>Oops! Page Not Found (404)</h1>
+    <p>Sorry, the page you're looking for doesn't exist.</p>
+    <p>COME BACK AND SHOP WITH US</p>
+    <p><a href="Products.aspx">Go Back</a></p>
 
-<head>
-    <meta charset="utf-8" />
-    <title>Page Not Found</title>
     <style>
         body {
             background-color: #f8d7da; /* Light background matching the theme */
@@ -31,13 +30,5 @@
             color: #c0396b;
         }
     </style>
-</head>
-<body>
-    <h1>Oops! Page Not Found (404)</h1>
-    <p>Sorry, the page you're looking for doesn't exist.</p>
-    <p>COME BACK AND SHOP WITH US</p>
-    <p><a href="Products.aspx">Go Back</a></p>
-</body>
-</html>
 
 </asp:Content>

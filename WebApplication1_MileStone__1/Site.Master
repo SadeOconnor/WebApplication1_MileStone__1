@@ -51,57 +51,78 @@
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/About">About</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contact</a></li>
                         <li><a href="cart.aspx" class="view-cart-button">View Cart</a></li>
+                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Login.aspx">Login</a></li>
+                        <li class="nav-item">
+                         <asp:Button ID="btnLogout" runat="server" Text="Logout" OnClick="Logout_Click" CssClass="logout-button" />
+                            </li>
+                     
+                        
                        
                     </ul>
                 </div>
             </div>
         </nav>
         <style>
-    nav {
-        background-color: #f8d7da; /* Light pink background for nav */
-        padding: 10px 20px; /* Padding around the nav */
-        display: flex; /* Flexbox for layout */
-        justify-content: space-between; /* Space between items */
-        align-items: center; /* Center items vertically */
-    }
+     nav {
+            background-color: #f8d7da; /* Light pink background for nav */
+            padding: 10px 20px; /* Padding around the nav */
+            display: flex; /* Flexbox for layout */
+            justify-content: space-between; /* Space between items */
+            align-items: center; /* Center items vertically */
+        }
 
-    nav ul {
-        list-style-type: none; /* Remove bullets from list */
-        display: flex; /* Flexbox for list items */
-        margin: 0; /* Remove default margin */
-        padding: 0; /* Remove default padding */
-    }
+        nav ul {
+            list-style-type: none; /* Remove bullets from list */
+            display: flex; /* Flexbox for list items */
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+        }
 
-    nav li {
-        margin-right: 20px; /* Space between nav items */
-    }
+        nav li {
+            margin-right: 20px; /* Space between nav items */
+        }
 
-    nav a {
-        text-decoration: none; /* Remove underline */
-        color: #e75480; /* Dark pink for text */
-        font-size: 1.1rem; /* Font size */
-        transition: color 0.3s ease; /* Smooth color transition */
-    }
+        nav a {
+            text-decoration: none; /* Remove underline */
+            color: #e75480; /* Dark pink for text */
+            font-size: 1.1rem; /* Font size */
+            transition: color 0.3s ease; /* Smooth color transition */
+        }
 
-    nav a:hover {
-        color: #c0396b; /* Darker pink on hover */
-    }
+        nav a:hover {
+            color: #c0396b; /* Darker pink on hover */
+        }
 
-    .view-cart-button {
-        display: inline-block; /* Make it behave like a button */
-        background-color: #e75480; /* Dark pink background */
-        color: white; /* White text color */
-        padding: 10px 20px; /* Padding for button */
-        border-radius: 5px; /* Slightly rounded corners */
-        font-size: 1rem; /* Font size */
-        text-decoration: none; /* Remove underline */
-        transition: background-color 0.3s ease; /* Smooth background transition */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
-    }
+        .view-cart-button {
+            display: inline-block; /* Make it behave like a button */
+            background-color: #e75480; /* Dark pink background */
+            color: white; /* White text color */
+            padding: 10px 20px; /* Padding for button */
+            border-radius: 5px; /* Slightly rounded corners */
+            font-size: 1rem; /* Font size */
+            text-decoration: none; /* Remove underline */
+            transition: background-color 0.3s ease; /* Smooth background transition */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+        }
 
-    .view-cart-button:hover {
-        background-color: #c0396b; /* Darker pink on hover */
-    }
+        .view-cart-button:hover {
+            background-color: #c0396b; /* Darker pink on hover */
+        }
+
+        .logout-button {
+            background-color: #e75480; /* Dark pink */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #c0396b; /* Darker pink on hover */
+        }
+
 </style>
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
