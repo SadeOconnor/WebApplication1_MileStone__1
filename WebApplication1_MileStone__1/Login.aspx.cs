@@ -5,6 +5,9 @@ using System.Web.UI;
 using WebApplication1_MileStone__1.Models;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using System.Linq;
 
 namespace WebApplication1_MileStone__1
 {
@@ -38,11 +41,53 @@ namespace WebApplication1_MileStone__1
             }
         }
 
-        private bool VerifyPassword(string password, string storedHash)
+        protected void btnAdmin_Click(object sender, EventArgs e)
         {
-            string hashOfInput = HashPassword(password);
-            return hashOfInput.Equals(storedHash, StringComparison.OrdinalIgnoreCase);
+            // Redirect to Adminlog.aspx page
+            Response.Redirect("Adminlog.aspx");
         }
+
+        private bool IsStrongPassword(string password)
+        {
+            // Check for minimum length of 8 characters
+            if (password.Length < 8)
+            {
+                return false;
+            }
+
+            // Check for at least one lowercase letter
+            if (!password.Any(c => char.IsLower(c)))
+            {
+                return false;
+            }
+
+            // Check for at least one uppercase letter
+            if (!password.Any(c => char.IsUpper(c)))
+            {
+                return false;
+            }
+
+            // Check for at least one digit
+            if (!password.Any(c => char.IsDigit(c)))
+            {
+                return false;
+            }
+
+            // Check for at least one special character
+            if (!password.Any(c => !char.IsLetterOrDigit(c)))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool VerifyPassword(string enteredPassword, string storedHashedPassword)
+        {
+            string enteredHashedPassword = HashPassword(enteredPassword);  // Hash the entered password to compare it
+            return enteredHashedPassword.Equals(storedHashedPassword, StringComparison.OrdinalIgnoreCase);
+        }
+
 
 
         protected void btnSubmit_Click(object sender, EventArgs e)
@@ -61,24 +106,30 @@ namespace WebApplication1_MileStone__1
         private void LoginUser()
         {
             string username = txtUsername.Text.Trim();
-            string password = txtPassword.Text.Trim();
+            string password = txtPassword.Text.Trim();  // This is the entered password.
 
             using (SqlConnection sqlCon = new SqlConnection(connectionString))
             {
                 sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand("SELECT UserID, Password FROM Users WHERE Username=@Username", sqlCon);
+                SqlCommand sqlCmd = new SqlCommand("SELECT UserID, Password, Role FROM Users WHERE Username=@Username", sqlCon);
                 sqlCmd.Parameters.AddWithValue("@Username", username);
 
                 SqlDataReader reader = sqlCmd.ExecuteReader();
                 if (reader.Read())
                 {
-                    string storedHashedPassword = reader["Password"].ToString();
+                    string storedHashedPassword = reader["Password"].ToString(); // The hashed password stored in the database.
+                   
 
-                    // Verify the password
-                    if (VerifyPassword(password, storedHashedPassword))
+                        // Verify the entered password against the stored hash
+                        if (VerifyPassword(password, storedHashedPassword))
                     {
                         int userId = Convert.ToInt32(reader["UserID"]);
+                        string userRole = reader["Role"].ToString();
+
+                        // Store user and role in session
                         Session["User"] = new User { Username = username, UserID = userId, ShoppingCart = new ShoppingCart() };
+                        Session["UserRole"] = userRole; // Store the role
+
                         Response.Redirect("Products.aspx");
                     }
                     else
@@ -93,6 +144,68 @@ namespace WebApplication1_MileStone__1
             }
         }
 
+        protected void btnLogin_Click(object sender, EventArgs e)
+        {
+            string username = txtUsername.Text.Trim();
+            string password = txtPassword.Text.Trim();
+
+            // Check for admin credentials first
+            if (username == "SadeAdmin" && password == "Password123#")
+            {
+                // Set admin session
+                Session["User"] = new User { Username = username, UserID = 1, ShoppingCart = new ShoppingCart() };
+                Session["UserRole"] = "Admin";
+                Response.Redirect("Products.aspx");
+                return;
+            }
+
+            // Regular user login logic continues here
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                lblErrorMessage.Text = "Please enter both username and password.";
+                return;
+            }
+
+            using (SqlConnection sqlCon = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    SqlCommand sqlCmd = new SqlCommand("SELECT UserID, Password, UserRole FROM Users WHERE Username=@Username", sqlCon);
+                    sqlCmd.Parameters.AddWithValue("@Username", username);
+
+                    SqlDataReader reader = sqlCmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        string storedHashedPassword = reader["Password"].ToString();
+
+                        if (VerifyPassword(password, storedHashedPassword))
+                        {
+                            int userId = Convert.ToInt32(reader["UserID"]);
+                            string userRole = reader["UserRole"].ToString();
+
+                            Session["User"] = new User { Username = username, UserID = userId, ShoppingCart = new ShoppingCart() };
+                            Session["UserRole"] = userRole;
+
+                            Response.Redirect("Products.aspx");
+                        }
+                        else
+                        {
+                            lblErrorMessage.Text = "Invalid username or password.";
+                        }
+                    }
+                    else
+                    {
+                        lblErrorMessage.Text = "Invalid username or password.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lblErrorMessage.Text = "Error during login: " + ex.Message;
+                }
+            }
+        }
         private bool IsUsernameAvailable(string username, SqlConnection sqlCon)
         {
             SqlCommand checkCmd = new SqlCommand("SELECT COUNT(*) FROM Users WHERE Username = @Username", sqlCon);
@@ -105,29 +218,36 @@ namespace WebApplication1_MileStone__1
         {
             if (txtUsername.Text == "" || txtPassword.Text == "")
             {
-                lblErrorMessage.Text = "Please Fill Mandatory Fields";
+                lblErrorMessage.Text = "Please fill in all mandatory fields.";
+                return;
+            }
+
+            // Validate password strength
+            if (!IsStrongPassword(txtPassword.Text.Trim()))
+            {
+                lblErrorMessage.Text = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
                 return;
             }
 
             if (txtPassword.Text != txtConfirmPassword.Text)
             {
-                lblErrorMessage.Text = "Passwords do not match";
+                lblErrorMessage.Text = "Passwords do not match.";
                 return;
             }
 
             using (SqlConnection sqlCon = new SqlConnection(connectionString))
             {
-                sqlCon.Open();
-
-                // Check if username is available
-                if (!IsUsernameAvailable(txtUsername.Text.Trim(), sqlCon))
-                {
-                    lblErrorMessage.Text = "Username already exists. Please choose a different username.";
-                    return;
-                }
-
                 try
                 {
+                    sqlCon.Open();
+
+                    // Check if the username is available
+                    if (!IsUsernameAvailable(txtUsername.Text.Trim(), sqlCon))
+                    {
+                        lblErrorMessage.Text = "Username already exists. Please choose a different username.";
+                        return;
+                    }
+
                     SqlCommand sqlCmd = new SqlCommand("UserAddOrEdit", sqlCon);
                     sqlCmd.CommandType = CommandType.StoredProcedure;
                     sqlCmd.Parameters.AddWithValue("@UserID", Convert.ToInt32(hfUserID.Value == "" ? "0" : hfUserID.Value));
@@ -153,18 +273,32 @@ namespace WebApplication1_MileStone__1
                         ShoppingCart = new ShoppingCart()
                     };
 
+                    // Assign the "User" role to the newly created user
+                    var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+                    var user = userManager.FindByName(txtUsername.Text.Trim());
+
+                    if (user != null)
+                    {
+                        IdentityResult result = userManager.AddToRole(user.Id, "User");
+                        if (!result.Succeeded)
+                        {
+                            lblErrorMessage.Text = "Role assignment failed: " + string.Join(", ", result.Errors);
+                            return;
+                        }
+                    }
+
                     Clear();
                     lblSuccessMessage.Text = "Registration Successful!";
                     Response.Redirect("Products.aspx");
                 }
-                catch
+                catch (Exception ex)
                 {
-                    lblErrorMessage.Text = "An error occurred during registration. Please try again.";
-                    // You might want to log the exception details somewhere
+                    // Provide more details about the error for debugging
+                    lblErrorMessage.Text = "An error occurred during registration: " + ex.Message;
+                    // Optionally log ex.StackTrace for detailed debugging information
                 }
             }
         }
-      
 
         protected void btnLogout_Click(object sender, EventArgs e)
         {

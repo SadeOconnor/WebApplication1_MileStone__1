@@ -4,15 +4,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Login</title>
+
+    <script type="text/javascript">
+    function checkAdminPassword() {
+        var password = prompt("Please enter admin password:", "");
+        if (password == "Adminbloom123#") { 
+            return true;
+        } else {
+            alert("Incorrect password!");
+            return false;
+        }
+    }
+</script>
+
     <style>
         body {
-            background-color: #ff66b2; /* Set the background color to pink */
+            background-color: #ff66b2; /* Pink background */
             font-family: Arial, sans-serif;
             color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
         h2 {
             font-family: "Brush Script MT", cursive; /* Cursive font for heading */
@@ -25,17 +39,16 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            width: 200%;
-        }
-        table {
             width: 100%;
-            border-collapse: collapse;
+            max-width: 400px;
+            margin-bottom: 20px;
         }
-        label {
-            display: inline-block;
-            margin: 10px 0 5px;
-            color: #333;
+        .form-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            width: 80%;
+            margin: 0 auto;
         }
         .input-field, .dropdown {
             width: 100%;
@@ -59,6 +72,10 @@
         }
         .message {
             font-size: 0.9em;
+        }
+        .left-form, .right-form {
+            flex: 1;
+            display: block;
         }
     </style>
 </head>
@@ -128,7 +145,21 @@
                         <asp:Button Text="Submit" ID="btnSubmit" CssClass="button" runat="server" OnClick="btnSubmit_Click" />
                     </td>
                 </tr>
-                <tr>
+                       <tr>
+                    <td></td>
+                    <td colspan="2">
+                        <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" CssClass="button" />
+                    </td>
+                </tr>
+                 <!-- Admin -->
+                      <tr>
+             <td></td>
+                 <td colspan="2">
+                            <asp:Button ID="Button1" runat="server" Text="Admin" OnClientClick="return checkAdminPassword();" 
+            OnClick="btnAdmin_Click" CssClass="button" />
+                    </td>
+            </tr>
+                      <tr>
                     <td></td>
                     <td colspan="2">
                         <asp:Label Text="" ID="lblSuccessMessage" CssClass="message" ForeColor="Green" runat="server" />
@@ -140,8 +171,12 @@
                         <asp:Label Text="" ID="lblErrorMessage" CssClass="message" ForeColor="Red" runat="server" />
                     </td>
                 </tr>
+
             </table>
         </div>
+
+
+
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:UserResgistrationDBConnectionString %>" SelectCommand="SELECT * FROM [UserReg]"></asp:SqlDataSource>
     </form>
 </body>

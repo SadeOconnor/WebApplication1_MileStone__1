@@ -15,13 +15,40 @@ namespace WebApplication1_MileStone__1
     {
 
         /// <summary>
-        /// btnLogout control.
+        /// manageProductsItem control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnLogout;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl manageProductsItem;
+
+        /// <summary>
+        /// manageUsersItem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl manageUsersItem;
+
+        /// <summary>
+        /// orderHistoryItem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl orderHistoryItem;
+
+        /// <summary>
+        /// NavigationMenu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Menu NavigationMenu;
 
         /// <summary>
         /// MainContent control.

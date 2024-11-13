@@ -1,9 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient; // Add this using directive for SQL operations
 using System.Web;
 using System.Web.UI;
 using WebApplication1_MileStone__1.Models;
+using System.Web.UI.WebControls;
+using System.Diagnostics;
+
 
 
 namespace WebApplication1_MileStone__1
@@ -12,7 +17,33 @@ namespace WebApplication1_MileStone__1
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                ShowAdminMenuItems();
+            }
+        }
 
+        private void ShowAdminMenuItems()
+        {
+            // Check if the user is in the 'SadeAdmin' role
+            if (HttpContext.Current.User != null && HttpContext.Current.User.IsInRole("SadeAdmin"))
+            {
+                // Make the items visible for the 'SadeAdmin' role
+                manageProductsItem.Visible = true;
+                manageUsersItem.Visible = true;
+            }
+            else
+            {
+                // Hide the items if the user is not in 'SadeAdmin' role
+                manageProductsItem.Visible = true;
+                manageUsersItem.Visible = true;
+            }
+        }
+
+        protected void btnOrderHistory_Click(object sender, EventArgs e)
+        {
+            // Redirect to the order history page
+            Response.Redirect("ViewOrderHistory.aspx");
         }
 
         private ShoppingCart GetShoppingCartForUser(string userId)
